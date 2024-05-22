@@ -446,6 +446,7 @@ void translate_syscall_exit(Tracee *tracee)
 		/* Some 32-bit programs like package managers can be
 		 * confused when the kernel reports "x86_64".  */
 		size = sizeof(utsname.machine);
+		printf("utsname.machine: %s\n", utsname.machine);
 # if defined(ARCH_X86_64)
 		strncpy(utsname.machine, "i686", size);
 # elif defined(ARCH_ARM_EABI)
