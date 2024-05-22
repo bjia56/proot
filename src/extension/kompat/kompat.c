@@ -881,6 +881,13 @@ static int parse_utsname(Config *config, const char *string)
 	else
 		config->actual_release = parse_kernel_release(utsname.release);
 
+#if defined(ARCH_ARM_EABI)
+	if (strncmp(utsname.machine, "armv8l", sizeof(utsname.machine)) == 0) {
+		strncpy(utsname.machine, "armv7l", sizeof(utsname.machine));
+		utsname.machine[sizeof(utsname.machine) - 1] = '\0';
+	}
+#endif
+
 	/* Check whether it is the simple format (ie. release number),
 	 * or the complex one:
 	 *

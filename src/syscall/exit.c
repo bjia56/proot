@@ -449,12 +449,10 @@ void translate_syscall_exit(Tracee *tracee)
 # if defined(ARCH_X86_64)
 		strncpy(utsname.machine, "i686", size);
 # elif defined(ARCH_ARM_EABI)
-		printf("utsname.machine: %s %d\n", utsname.machine, strncmp(utsname.machine, "armv8l", size));
 		if (strncmp(utsname.machine, "armv8l", size) == 0)
 			strncpy(utsname.machine, "armv7l", size);
 # endif
 		utsname.machine[size - 1] = '\0';
-		printf("utsname.machine: %s\n", utsname.machine);
 
 		status = write_data(tracee, address, &utsname, sizeof(utsname));
 		if (status < 0)
