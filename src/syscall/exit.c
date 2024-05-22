@@ -422,7 +422,7 @@ void translate_syscall_exit(Tracee *tracee)
 		break;
 	}
 
-#if defined(ARCH_X86_64)
+#if defined(ARCH_X86_64) || defined(ARCH_ARM_EABI)
 	case PR_uname: {
 		struct utsname utsname;
 		word_t address;
@@ -444,7 +444,11 @@ void translate_syscall_exit(Tracee *tracee)
 		/* Some 32-bit programs like package managers can be
 		 * confused when the kernel reports "x86_64".  */
 		size = sizeof(utsname.machine);
+# if defined(ARCH_X86_64)
 		strncpy(utsname.machine, "i686", size);
+# elif defined(ARCH_ARM_EABI)
+		strncpy(utsname.machine, "armv7l", size);
+# endif
 		utsname.machine[size - 1] = '\0';
 
 		status = write_data(tracee, address, &utsname, sizeof(utsname));
@@ -485,7 +489,7 @@ void translate_syscall_exit(Tracee *tracee)
 
 		/* Don't overwrite the syscall result.  */
 		goto end;
-	
+
 	case PR_utime:
 		if ((int) syscall_result == -ENOSYS)
 		{
