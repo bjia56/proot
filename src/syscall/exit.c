@@ -428,8 +428,10 @@ void translate_syscall_exit(Tracee *tracee)
 		word_t address;
 		size_t size;
 
+# if defined(ARCH_X86_64)
 		if (get_abi(tracee) != ABI_2)
 			goto end;
+# endif
 
 		/* Error reported by the kernel.  */
 		if ((int) syscall_result < 0)
@@ -447,8 +449,8 @@ void translate_syscall_exit(Tracee *tracee)
 # if defined(ARCH_X86_64)
 		strncpy(utsname.machine, "i686", size);
 # elif defined(ARCH_ARM_EABI)
-# error foo!
-		strncpy(utsname.machine, "armv7l", size);
+		if (strncmp(utsname.machine, "armv8l", size) == 0)
+			strncpy(utsname.machine, "armv7l", size);
 # endif
 		utsname.machine[size - 1] = '\0';
 
