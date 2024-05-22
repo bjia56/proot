@@ -454,6 +454,7 @@ void translate_syscall_exit(Tracee *tracee)
 			strncpy(utsname.machine, "armv7l", size);
 # endif
 		utsname.machine[size - 1] = '\0';
+		printf("utsname.machine: %s\n", utsname.machine);
 
 		status = write_data(tracee, address, &utsname, sizeof(utsname));
 		if (status < 0)
