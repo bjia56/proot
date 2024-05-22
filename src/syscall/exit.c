@@ -423,6 +423,7 @@ void translate_syscall_exit(Tracee *tracee)
 	}
 
 #if defined(ARCH_X86_64) || defined(ARCH_ARM_EABI)
+# error foo!
 	case PR_uname: {
 		struct utsname utsname;
 		word_t address;
